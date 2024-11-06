@@ -6,7 +6,7 @@ export interface RepeatInfo {
   endDate?: string;
 }
 
-export interface EventForm {
+export interface IEventForm {
   title: string;
   date: string;
   startTime: string;
@@ -18,6 +18,6 @@ export interface EventForm {
   notificationTime: number; // 분 단위로 저장
 }
 
-export interface Event extends EventForm {
+export interface Event extends IEventForm {
   id: string;
 }
