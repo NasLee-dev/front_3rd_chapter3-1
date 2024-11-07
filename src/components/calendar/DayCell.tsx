@@ -13,13 +13,7 @@ interface DayCellProps {
   isCurrentMonth?: boolean;
 }
 
-export const DayCell: React.FC<DayCellProps> = ({
-  currentDate,
-  day,
-  events,
-  onEventClick,
-  isCurrentMonth = true,
-}) => {
+export const DayCell: React.FC<DayCellProps> = ({ currentDate, day, events, onEventClick }) => {
   if (!day) {
     return <Td />;
   }

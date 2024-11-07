@@ -9,7 +9,7 @@ interface TimeGridProps {
   date: Date;
 }
 
-export const TimeGrid = ({ events, date }: TimeGridProps) => {
+export const TimeGrid = ({ events }: TimeGridProps) => {
   const hours = useMemo(() => {
     return Array.from({ length: 24 }, (_, i) => i);
   }, []);

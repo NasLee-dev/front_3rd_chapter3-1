@@ -1,5 +1,5 @@
 import { ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons';
-import { Heading, HStack, IconButton, Select, VStack } from '@chakra-ui/react';
+import { Heading, HStack, IconButton, Select } from '@chakra-ui/react';
 
 interface CalendarHeaderProps {
   view: 'week' | 'month';
