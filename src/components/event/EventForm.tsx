@@ -1,25 +1,29 @@
 import {
-  Button,
-  Checkbox,
+  VStack,
   FormControl,
   FormLabel,
-  Heading,
-  HStack,
   Input,
   Select,
-  VStack,
+  Checkbox,
+  Button,
+  HStack,
+  Heading,
+  Tooltip,
 } from '@chakra-ui/react';
-import { ChangeEvent } from 'react';
+import React from 'react';
 
-import { TimeSection } from './TimeSection';
-import { Event, RepeatType } from '../../../types';
+import { CATEGORIES, NOTIFICATION_OPTIONS } from '../../constants/calendar';
+import { RepeatType } from '../../types';
+
+type TimeErrorRecord = Record<'startTimeError' | 'endTimeError', string | null>;
 
 interface EventFormProps {
-  editingEvent: Event | null;
   title: string;
   setTitle: (title: string) => void;
   date: string;
   setDate: (date: string) => void;
+  startTime: string;
+  endTime: string;
   description: string;
   setDescription: (description: string) => void;
   location: string;
@@ -28,38 +32,28 @@ interface EventFormProps {
   setCategory: (category: string) => void;
   isRepeating: boolean;
   setIsRepeating: (isRepeating: boolean) => void;
-  notificationTime: number;
-  setNotificationTime: (notificationTime: number) => void;
-  repeatType: RepeatType;
+  repeatType: string;
   setRepeatType: (repeatType: RepeatType) => void;
   repeatInterval: number;
-  setRepeatInterval: (repeatInterval: number) => void;
+  setRepeatInterval: (interval: number) => void;
   repeatEndDate: string;
-  setRepeatEndDate: (repeatEndDate: string) => void;
-  addOrUpdateEvent: () => void;
-  categories: string[];
-  notificationOptions: { value: number; label: string }[];
-  startTime: string;
-  endTime: string;
-  timeErrors: {
-    startTimeError: string | null;
-    endTimeError: string | null;
-  };
-  handleStartTimeChange: (e: ChangeEvent<HTMLInputElement>) => void;
-  handleEndTimeChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  setRepeatEndDate: (endDate: string) => void;
+  notificationTime: number;
+  setNotificationTime: (time: number) => void;
+  timeErrors: TimeErrorRecord;
+  editingEvent: any;
+  onSubmit: () => void;
+  handleStartTimeChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  handleEndTimeChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 export const EventForm = ({
-  editingEvent,
-  startTime,
-  endTime,
-  timeErrors,
-  handleStartTimeChange,
-  handleEndTimeChange,
   title,
   setTitle,
   date,
   setDate,
+  startTime,
+  endTime,
   description,
   setDescription,
   location,
@@ -68,17 +62,19 @@ export const EventForm = ({
   setCategory,
   isRepeating,
   setIsRepeating,
-  notificationTime,
-  setNotificationTime,
   repeatType,
   setRepeatType,
   repeatInterval,
   setRepeatInterval,
   repeatEndDate,
   setRepeatEndDate,
-  addOrUpdateEvent,
-  categories,
-  notificationOptions,
+  notificationTime,
+  setNotificationTime,
+  timeErrors,
+  editingEvent,
+  onSubmit,
+  handleStartTimeChange,
+  handleEndTimeChange,
 }: EventFormProps) => {
   return (
     <VStack w="400px" spacing={5} align="stretch">
@@ -94,13 +90,39 @@ export const EventForm = ({
         <Input type="date" value={date} onChange={(e) => setDate(e.target.value)} />
       </FormControl>
 
-      <TimeSection
-        startTime={startTime}
-        endTime={endTime}
-        errors={timeErrors}
-        handleStartTimeChange={handleStartTimeChange}
-        handleEndTimeChange={handleEndTimeChange}
-      />
+      <HStack width="100%">
+        <FormControl>
+          <FormLabel>시작 시간</FormLabel>
+          <Tooltip
+            label={timeErrors.startTimeError}
+            isOpen={!!timeErrors.startTimeError}
+            placement="top"
+          >
+            <Input
+              type="time"
+              value={startTime}
+              onChange={handleStartTimeChange}
+              isInvalid={!!timeErrors.startTimeError}
+            />
+          </Tooltip>
+        </FormControl>
+
+        <FormControl>
+          <FormLabel>종료 시간</FormLabel>
+          <Tooltip
+            label={timeErrors.endTimeError}
+            isOpen={!!timeErrors.endTimeError}
+            placement="top"
+          >
+            <Input
+              type="time"
+              value={endTime}
+              onChange={handleEndTimeChange}
+              isInvalid={!!timeErrors.endTimeError}
+            />
+          </Tooltip>
+        </FormControl>
+      </HStack>
 
       <FormControl>
         <FormLabel>설명</FormLabel>
@@ -116,7 +138,7 @@ export const EventForm = ({
         <FormLabel>카테고리</FormLabel>
         <Select value={category} onChange={(e) => setCategory(e.target.value)}>
           <option value="">카테고리 선택</option>
-          {categories.map((cat: any) => (
+          {CATEGORIES.map((cat) => (
             <option key={cat} value={cat}>
               {cat}
             </option>
@@ -137,7 +159,7 @@ export const EventForm = ({
           value={notificationTime}
           onChange={(e) => setNotificationTime(Number(e.target.value))}
         >
-          {notificationOptions.map((option: any) => (
+          {NOTIFICATION_OPTIONS.map((option) => (
             <option key={option.value} value={option.value}>
               {option.label}
             </option>
@@ -159,6 +181,7 @@ export const EventForm = ({
               <option value="yearly">매년</option>
             </Select>
           </FormControl>
+
           <HStack width="100%">
             <FormControl>
               <FormLabel>반복 간격</FormLabel>
@@ -169,6 +192,7 @@ export const EventForm = ({
                 min={1}
               />
             </FormControl>
+
             <FormControl>
               <FormLabel>반복 종료일</FormLabel>
               <Input
@@ -181,7 +205,7 @@ export const EventForm = ({
         </VStack>
       )}
 
-      <Button data-testid="event-submit-button" onClick={addOrUpdateEvent} colorScheme="blue">
+      <Button onClick={onSubmit} colorScheme="blue">
         {editingEvent ? '일정 수정' : '일정 추가'}
       </Button>
     </VStack>

@@ -19,6 +19,7 @@
     "@chakra-ui/react": "^2.8.2",
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
+    "axios": "^1.7.7",
     "express": "^4.19.2",
     "framer-motion": "^11.3.2",
     "msw": "^2.3.1",
@@ -46,10 +47,10 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-storybook": "^0.6.12",
     "eslint-plugin-vitest": "^0.2.6",
-    "vite-plugin-eslint": "^1.8.1",
     "jsdom": "^25.0.1",
     "typescript": "^5.2.2",
     "vite": "^5.3.1",
+    "vite-plugin-eslint": "^1.8.1",
     "vitest": "^2.0.2"
   }
 }

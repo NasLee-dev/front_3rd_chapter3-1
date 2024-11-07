@@ -1,3 +1,5 @@
+import { EventCategory } from './types/event';
+
 export type RepeatType = 'none' | 'daily' | 'weekly' | 'monthly' | 'yearly';
 
 export interface RepeatInfo {
@@ -6,18 +8,18 @@ export interface RepeatInfo {
   endDate?: string;
 }
 
-export interface IEventForm {
+export interface EventFormProps {
   title: string;
   date: string;
   startTime: string;
   endTime: string;
   description: string;
   location: string;
-  category: string;
+  category: EventCategory;
   repeat: RepeatInfo;
-  notificationTime: number; // 분 단위로 저장
+  notificationTime: number;
 }
 
-export interface Event extends IEventForm {
+export interface Event extends EventFormProps {
   id: string;
 }
